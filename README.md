@@ -38,3 +38,8 @@ a recreation of the Team Win Recovery Project keyboard as an IME
 ## UNIMPLEMENTED SHORTCUTS
 * ctrl+z       : undo
 * ctrl+shift+z : redo
+
+## KNOWN BUGS
+* left and right arrow keys do not work in terminals
+* cannot paste in terminals
+* cutting text in some fields make the cursor disappear
