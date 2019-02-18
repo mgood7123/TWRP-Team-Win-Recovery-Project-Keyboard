@@ -25,6 +25,7 @@ a recreation of the Team Win Recovery Project keyboard as an IME
 * fully functional Alt key
 * fully functional Escape key
 * fully functional key shortcuts
+* symbols key
 
 ## SUPPORTED SHORTCUTS
 * ctrl+a       : jump to start of text
