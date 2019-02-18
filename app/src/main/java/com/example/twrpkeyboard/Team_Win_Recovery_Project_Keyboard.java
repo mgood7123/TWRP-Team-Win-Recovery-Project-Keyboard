@@ -27,7 +27,7 @@ public class Team_Win_Recovery_Project_Keyboard extends InputMethodService imple
 
     private boolean shift = false;
     private boolean caps = false;
-    private boolean any_other_key = false;
+    private boolean symbol = false;
     private boolean ctrl = false;
     private boolean alt = false;
 
@@ -53,42 +53,90 @@ public class Team_Win_Recovery_Project_Keyboard extends InputMethodService imple
                 break;
             case TWRP.keys.CTRL:
                 ctrl = !ctrl;
+                if (ctrl) {
+                    if (caps) {
+                        keyboard = new Keyboard(this, R.xml.ctrl_shift);
+                        kv.setKeyboard(keyboard);
+                    } else {
+                        keyboard = new Keyboard(this, R.xml.ctrl);
+                        kv.setKeyboard(keyboard);
+                    }
+                } else if (caps) {
+                    if (symbol) {
+                        keyboard = new Keyboard(this, R.xml.symbols);
+                        kv.setKeyboard(keyboard);
+                    } else {
+                        keyboard = new Keyboard(this, R.xml.qwerty_shift);
+                        kv.setKeyboard(keyboard);
+                    }
+                } else if (symbol) {
+                    keyboard = new Keyboard(this, R.xml.symbols);
+                    kv.setKeyboard(keyboard);
+                } else {
+                    keyboard = new Keyboard(this, R.xml.qwerty);
+                    kv.setKeyboard(keyboard);
+                }
                 break;
             case TWRP.keys.ALT:
-                alt = !alt;
+//                alt = !alt;
                 break;
             case TWRP.keys.TAB:
                 ic.commitText("    ",1);
                 break;
-            case Keyboard.KEYCODE_MODE_CHANGE :
+            case TWRP.keys.SYMBOL :
+                if (!ctrl && !alt) symbol = !symbol;
+                if (symbol && !ctrl && !alt) {
+                    keyboard = new Keyboard(this, R.xml.symbols);
+                    kv.setKeyboard(keyboard);
+                } else if (ctrl && caps) {
+                    keyboard = new Keyboard(this, R.xml.ctrl_shift);
+                    kv.setKeyboard(keyboard);
+                } else if (ctrl) {
+                    keyboard = new Keyboard(this, R.xml.ctrl);
+                    kv.setKeyboard(keyboard);
+                } else if (caps) {
+                    keyboard = new Keyboard(this, R.xml.qwerty_shift);
+                    kv.setKeyboard(keyboard);
+                } else {
+                    keyboard = new Keyboard(this, R.xml.qwerty);
+                    kv.setKeyboard(keyboard);
+                }
                 break;
             case Keyboard.KEYCODE_DELETE :
-                CharSequence selectedText = ic.getSelectedText(0);
+                if (!ctrl && !alt) {
+                    CharSequence selectedText = ic.getSelectedText(0);
 
-                if (TextUtils.isEmpty(selectedText)) {
-                    ic.deleteSurroundingText(1, 0);
-                } else {
-                    ic.commitText("", 1);
+                    if (TextUtils.isEmpty(selectedText)) {
+                        ic.deleteSurroundingText(1, 0);
+                    } else {
+                        ic.commitText("", 1);
+                    }
                 }
                 break;
             case Keyboard.KEYCODE_SHIFT:
                 caps = !caps;
-//                if (caps) {
-//                    keyboard = new Keyboard(this, R.xml.qwerty);
-//                    kv.setKeyboard(keyboard);
-//                } else {
-//                    keyboard = new Keyboard(this, R.xml.qwerty);
-//                    kv.setKeyboard(keyboard);
-//                }
-                keyboard.setShifted(caps);
-                kv.invalidateAllKeys();
+                if (ctrl && caps) {
+                    keyboard = new Keyboard(this, R.xml.ctrl_shift);
+                    kv.setKeyboard(keyboard);
+                } else if (ctrl) {
+                        keyboard = new Keyboard(this, R.xml.ctrl);
+                        kv.setKeyboard(keyboard);
+                } else if (caps) {
+                    keyboard = new Keyboard(this, R.xml.qwerty_shift);
+                    kv.setKeyboard(keyboard);
+                } else {
+                    keyboard = new Keyboard(this, R.xml.qwerty);
+                    kv.setKeyboard(keyboard);
+                }
                 break;
             case Keyboard.KEYCODE_DONE:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                if (!ctrl && !alt) {
+                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                }
                 break;
             default:
                 char code = (char)primaryCode;
-                if (ctrl && !alt) {
+                if (ctrl) {
                     if (code == 'v')
                         ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_PASTE));
                     else if (code == 'c')
@@ -103,10 +151,11 @@ public class Team_Win_Recovery_Project_Keyboard extends InputMethodService imple
                         if (!caps) ic.setSelection(0, 0);
                         else ic.performContextMenuAction(android.R.id.selectAll);
                     }
-//                    else if (code == 'z') {
+                    else if (code == 'z') {
 //                        if (!caps) ic.performContextMenuAction(android.R.id.undo);
 //                        else ic.performContextMenuAction(android.R.id.redo);
-//                    }
+                        break;
+                    }
                     else if (code == 'e') {
                         ExtractedText extractedText = ic.getExtractedText(new ExtractedTextRequest(), 0);
                         if (extractedText != null) {
@@ -118,15 +167,10 @@ public class Team_Win_Recovery_Project_Keyboard extends InputMethodService imple
                     }
                     break;
                 }
-                if (alt && !ctrl) {
-                    if ((int)code == TWRP.keys.TAB)
-                        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_APP_SWITCH));
-                    break;
+                if (alt) ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_APP_SWITCH));
+                if (!ctrl && !alt) {
+                    ic.commitText(String.valueOf(code),1);
                 }
-                if(Character.isLetter(code) && caps){
-                    code = Character.toUpperCase(code);
-                }
-                ic.commitText(String.valueOf(code),1);
         }
     }
 

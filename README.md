@@ -19,13 +19,13 @@ a recreation of the Team Win Recovery Project keyboard as an IME
 * return key
 * shift key
 * backspace key
+* symbols key
+* Pages for each section of keys (ctrl, symbols, alphabeticals)
 
 ## UNIMPLEMENTED
-* fully functional Control key
-* fully functional Alt key
-* fully functional Escape key
+* Alt key
+* Escape key
 * fully functional key shortcuts
-* symbols key
 
 ## SUPPORTED SHORTCUTS
 * ctrl+a       : jump to start of text
