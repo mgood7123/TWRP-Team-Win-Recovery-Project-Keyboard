@@ -1,0 +1,5 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="ime_name">TWRP Keyboard</string>
+    <string name="app_name">TWRP Keyboard</string>
+    <string name="subtype_en_US">English (US)</string>
+</resources>
