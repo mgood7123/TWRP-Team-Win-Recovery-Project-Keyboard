@@ -103,6 +103,10 @@ public class Team_Win_Recovery_Project_Keyboard extends InputMethodService imple
                         if (!caps) ic.setSelection(0, 0);
                         else ic.performContextMenuAction(android.R.id.selectAll);
                     }
+//                    else if (code == 'z') {
+//                        if (!caps) ic.performContextMenuAction(android.R.id.undo);
+//                        else ic.performContextMenuAction(android.R.id.redo);
+//                    }
                     else if (code == 'e') {
                         ExtractedText extractedText = ic.getExtractedText(new ExtractedTextRequest(), 0);
                         if (extractedText != null) {
